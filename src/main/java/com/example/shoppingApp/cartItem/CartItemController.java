@@ -1,6 +1,7 @@
 package com.example.shoppingApp.cartItem;
 
 import com.example.shoppingApp.api_models.request.CartItemRequest;
+import com.example.shoppingApp.api_models.response.CartItemResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,13 +18,18 @@ public class CartItemController {
     private final CartItemService cartItemService;
 
     @PostMapping(path = "add")
-    public ResponseEntity<CartItem> addCartItem(@RequestBody CartItemRequest request) {
+    public ResponseEntity<CartItemResponse<CartItem>> addCartItem(@RequestBody CartItemRequest request) {
         CartItem response = cartItemService
                 .addProductToCart(request.email, request.productId, request.quantity);
+
+        CartItemResponse<CartItem> cartItemCartItemResponse = new CartItemResponse<>();
         if (response == null) {
-            return new ResponseEntity<CartItem>((CartItem) null, HttpStatus.BAD_REQUEST);
+            cartItemCartItemResponse.setMessage("product not available in product list");
+            cartItemCartItemResponse.setIsSuccess(false);
+            return new ResponseEntity<>(cartItemCartItemResponse, HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<CartItem>(response, HttpStatus.OK);
+            cartItemCartItemResponse.setData(response);
+            return new ResponseEntity<>(cartItemCartItemResponse, HttpStatus.OK);
         }
 
     }

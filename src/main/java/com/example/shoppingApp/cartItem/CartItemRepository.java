@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
     CartItem findByProductId(Long id);
+    Boolean existsByProductId(Long productId);
     @Modifying
     @Query("update CartItem ci set ci.quantity = :quantity where ci.productId = :productId")
     void updateQuantityByProductId(@Param("quantity") Integer quantity, @Param("productId") Long productId);
