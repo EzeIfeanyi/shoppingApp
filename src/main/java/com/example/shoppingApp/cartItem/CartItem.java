@@ -1,6 +1,7 @@
 package com.example.shoppingApp.cartItem;
 
 import com.example.shoppingApp.cart.Cart;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class CartItem {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
